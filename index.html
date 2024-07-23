@@ -15,32 +15,18 @@
             width: 400px;
             height: 400px;
             position: relative;
-            border: 2px solid #333;
+            background-image: url('pizza.png');
+            background-size: cover;
             border-radius: 50%;
-            background-color: #f4f4f4;
-        }
-        #pizza-crust {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background-color: #e67e22; /* Slightly lighter than previous */
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-        #pizza-base {
-            width: 85%;
-            height: 85%;
-            border-radius: 50%;
-            background-color: #f1c40f;
-            position: absolute;
-            top: 7.5%;
-            left: 7.5%;
         }
         .topping {
             position: absolute;
-            font-size: 2rem;
-            pointer-events: none;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            border-radius: 50%;
+            display: none;
         }
         #controls {
             margin: 20px;
@@ -62,49 +48,36 @@
 <body>
     <h1>Pizza Maker Game</h1>
     <div id="pizza-maker">
-        <div id="pizza-crust"></div>
-        <div id="pizza-base"></div>
+        <img src="basil.png" class="topping" id="basil">
+        <img src="pepperoni.png" class="topping" id="pepperoni">
+        <img src="mushroom.png" class="topping" id="mushroom">
+        <img src="olive.png" class="topping" id="olive">
+        <img src="pepper.png" class="topping" id="pepper">
     </div>
     <div id="controls">
-        <button class="topping-button" onclick="addTopping('pepperoni')">Add Pepperoni</button>
-        <button class="topping-button" onclick="addTopping('mushroom')">Add Mushroom</button>
+        <button class="topping-button" onclick="toggleTopping('basil')">Toggle Basil</button>
+        <button class="topping-button" onclick="toggleTopping('pepperoni')">Toggle Pepperoni</button>
+        <button class="topping-button" onclick="toggleTopping('mushroom')">Toggle Mushroom</button>
+        <button class="topping-button" onclick="toggleTopping('olive')">Toggle Olive</button>
+        <button class="topping-button" onclick="toggleTopping('pepper')">Toggle Pepper</button>
         <button class="topping-button" onclick="resetPizza()">Reset Pizza</button>
     </div>
 
     <script>
-        let lastAngle = -Math.PI / 2; // Start with the top of the pizza
-
-        function addTopping(topping) {
-            const pizzaMaker = document.getElementById('pizza-maker');
-            const toppingElement = document.createElement('div');
-            toppingElement.className = 'topping';
-            if (topping === 'pepperoni') {
-                toppingElement.textContent = '🔴';
-            } else if (topping === 'mushroom') {
-                toppingElement.textContent = '🍄🟫';
+        function toggleTopping(topping) {
+            const toppingElement = document.getElementById(topping);
+            if (toppingElement.style.display === 'none') {
+                toppingElement.style.display = 'block';
+            } else {
+                toppingElement.style.display = 'none';
             }
-
-            // Calculate the next angle for the topping
-            lastAngle += Math.PI; // Move to the opposite end
-            const radius = 200; // Radius of the pizza base
-            const centerX = 200;
-            const centerY = 200;
-
-            const x = centerX + radius * Math.cos(lastAngle) - 25; // 25 is half of the topping width
-            const y = centerY + radius * Math.sin(lastAngle) - 25;
-
-            toppingElement.style.top = y + 'px';
-            toppingElement.style.left = x + 'px';
-            pizzaMaker.appendChild(toppingElement);
         }
 
         function resetPizza() {
-            const pizzaMaker = document.getElementById('pizza-maker');
-            pizzaMaker.innerHTML = `
-                <div id="pizza-crust"></div>
-                <div id="pizza-base"></div>
-            `;
-            lastAngle = -Math.PI / 2; // Reset the angle for new toppings
+            const toppings = document.querySelectorAll('.topping');
+            toppings.forEach(topping => {
+                topping.style.display = 'none';
+            });
         }
     </script>
 </body>

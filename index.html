@@ -64,10 +64,13 @@
     </div>
 
     <script>
+        let zIndexCounter = 1;
+
         function toggleTopping(topping) {
             const toppingElement = document.getElementById(topping);
             if (toppingElement.style.display === 'none') {
                 toppingElement.style.display = 'block';
+                toppingElement.style.zIndex = zIndexCounter++;
             } else {
                 toppingElement.style.display = 'none';
             }
@@ -78,6 +81,7 @@
             toppings.forEach(topping => {
                 topping.style.display = 'none';
             });
+            zIndexCounter = 1;
         }
     </script>
 </body>

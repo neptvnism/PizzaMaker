@@ -17,17 +17,30 @@
             position: relative;
             border: 2px solid #333;
             border-radius: 50%;
-            background-color: #f1c40f;
+            background-color: #f4f4f4;
         }
-        #pizza-base {
+        #pizza-crust {
             width: 100%;
             height: 100%;
             border-radius: 50%;
+            background-color: #e67e22; /* Slightly lighter than previous */
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        #pizza-base {
+            width: 85%;
+            height: 85%;
+            border-radius: 50%;
+            background-color: #f1c40f;
+            position: absolute;
+            top: 7.5%;
+            left: 7.5%;
         }
         .topping {
             position: absolute;
-            width: 50px;
-            height: 50px;
+            font-size: 2rem;
+            pointer-events: none;
         }
         #controls {
             margin: 20px;
@@ -49,29 +62,49 @@
 <body>
     <h1>Pizza Maker Game</h1>
     <div id="pizza-maker">
+        <div id="pizza-crust"></div>
         <div id="pizza-base"></div>
     </div>
     <div id="controls">
         <button class="topping-button" onclick="addTopping('pepperoni')">Add Pepperoni</button>
         <button class="topping-button" onclick="addTopping('mushroom')">Add Mushroom</button>
-        <button class="topping-button" onclick="addTopping('olive')">Add Olive</button>
         <button class="topping-button" onclick="resetPizza()">Reset Pizza</button>
     </div>
 
     <script>
+        let lastAngle = -Math.PI / 2; // Start with the top of the pizza
+
         function addTopping(topping) {
             const pizzaMaker = document.getElementById('pizza-maker');
             const toppingElement = document.createElement('div');
             toppingElement.className = 'topping';
-            toppingElement.style.backgroundImage = `url('images/${topping}.png')`;
-            toppingElement.style.top = Math.random() * 350 + 'px';
-            toppingElement.style.left = Math.random() * 350 + 'px';
+            if (topping === 'pepperoni') {
+                toppingElement.textContent = '🔴';
+            } else if (topping === 'mushroom') {
+                toppingElement.textContent = '🍄🟫';
+            }
+
+            // Calculate the next angle for the topping
+            lastAngle += Math.PI; // Move to the opposite end
+            const radius = 200; // Radius of the pizza base
+            const centerX = 200;
+            const centerY = 200;
+
+            const x = centerX + radius * Math.cos(lastAngle) - 25; // 25 is half of the topping width
+            const y = centerY + radius * Math.sin(lastAngle) - 25;
+
+            toppingElement.style.top = y + 'px';
+            toppingElement.style.left = x + 'px';
             pizzaMaker.appendChild(toppingElement);
         }
 
         function resetPizza() {
             const pizzaMaker = document.getElementById('pizza-maker');
-            pizzaMaker.innerHTML = '<div id="pizza-base"></div>';
+            pizzaMaker.innerHTML = `
+                <div id="pizza-crust"></div>
+                <div id="pizza-base"></div>
+            `;
+            lastAngle = -Math.PI / 2; // Reset the angle for new toppings
         }
     </script>
 </body>

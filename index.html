@@ -28,6 +28,30 @@
             left: 0;
             border-radius: 50%;
             display: none;
+            animation: none;
+        }
+        .topping-animate {
+            animation: pop 0.2s ease-in-out;
+        }
+        @keyframes pop {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(0.9);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        .fire {
+            position: absolute;
+            font-size: 30px;
+            animation: flicker 1s infinite;
+        }
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
         #controls {
             margin: 20px;
@@ -69,6 +93,10 @@
         <img src="mushroom.png" class="topping" id="mushroom">
         <img src="olive.png" class="topping" id="olive">
         <img src="pepper.png" class="topping" id="pepper">
+        <div class="fire" id="fire1" style="top: 10px; left: 180px;">🔥</div>
+        <div class="fire" id="fire2" style="top: 180px; left: 10px;">🔥</div>
+        <div class="fire" id="fire3" style="top: 180px; left: 360px;">🔥</div>
+        <div class="fire" id="fire4" style="top: 360px; left: 180px;">🔥</div>
     </div>
     <div id="controls">
         <button class="topping-button" onclick="toggleTopping('basil')">Toggle Basil</button>
@@ -88,6 +116,10 @@
             if (toppingElement.style.display === 'none') {
                 toppingElement.style.display = 'block';
                 toppingElement.style.zIndex = zIndexCounter++;
+                toppingElement.classList.add('topping-animate');
+                setTimeout(() => {
+                    toppingElement.classList.remove('topping-animate');
+                }, 200);
             } else {
                 toppingElement.style.display = 'none';
             }
@@ -103,10 +135,25 @@
 
         function finishPizza() {
             const pizzaMaker = document.getElementById('pizza-maker');
+            const fires = document.querySelectorAll('.fire');
             pizzaMaker.classList.add('spin');
+            fires.forEach(fire => {
+                fire.style.display = 'block';
+            });
             setTimeout(() => {
                 pizzaMaker.classList.remove('spin');
-            }, 2000); // Reset spin after animation
+                fires.forEach(fire => {
+                    fire.style.display = 'none';
+                });
+            }, 2000); // Reset spin and fire after animation
+        }
+
+        // Hide fire emojis initially
+        window.onload = function() {
+            const fires = document.querySelectorAll('.fire');
+            fires.forEach(fire => {
+                fire.style.display = 'none';
+            });
         }
     </script>
 </body>
